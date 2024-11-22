@@ -24,6 +24,7 @@ onMounted(async () => {
 const movies = ref([]);
 
 const listMovies = async (genreId) => {
+    genreStore.setCurrentGenreId(genreId);
     isLoading.value = true;
     const response = await api.get('discover/movie', {
         params: {
@@ -49,12 +50,12 @@ function getGenreName(id) {
             {{ genre.name }}
         </li>
     </ul>
+    <loading v-model:active="isLoading" is-full-page />
 
     <span v-for="genre_id in movies.genre_id" :key="genre_id" @click="listMovies(genre_id)"
         :class="{ active: genre.id === genreStore.currentGenreId }">
         {{ genreStore.getGenreName(genre_id) }}
     </span>
-    <loading v-model:active="isLoading" is-full-page />
     <div class="movie-list">
         <div v-for="movie in movies" :key="movie.id" class="movie-card">
 
@@ -63,11 +64,7 @@ function getGenreName(id) {
             <div class="movie-details">
                 <p class="movie-title">{{ movie.title }}</p>
                 <p class="movie-release-date">{{ formatDate(movie.release_date) }}</p>
-                <p class="movie-genres">
-                    <span v-for="genre_id in movie.genre_ids" :key="genre_id" @click="listMovies(genre_id)">
-                        {{ getGenreName(genre_id) }}
-                    </span>
-                </p>
+                <p class="movie-genres"></p>
             </div>
 
         </div>
