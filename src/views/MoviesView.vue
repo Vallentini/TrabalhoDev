@@ -1,27 +1,24 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import api from '@/plugins/axios';
+import { useFavoritesStore } from '@/stores/favorites.js';
 import Loading from 'vue-loading-overlay';
-import { useGenreStore } from '@/stores/genre';
-import { useRouter } from 'vue-router'
-const router = useRouter()
+import { useGenreStore } from '@/stores/genre.js';
+import { useRouter } from 'vue-router';
 
-function openMovie(movieId) {
-  router.push({ name: 'MovieDetails', params: { movieId } });
-}
-
-const genreStore = useGenreStore();
-
-const isLoading = ref(false);
-const formatDate = (date) => new Date(date).toLocaleDateString('pt-BR');
 const genres = ref([]);
+const movies = ref([]);
+const isLoading = ref(false);
+const genreStore = useGenreStore();
+const favoritesStore = useFavoritesStore();
+const router = useRouter();
 
 onMounted(async () => {
     isLoading.value = true;
     await genreStore.getAllGenres('movie');
+    genres.value = genreStore.genres;
     isLoading.value = false;
 });
-const movies = ref([]);
 
 const listMovies = async (genreId) => {
     genreStore.setCurrentGenreId(genreId);
@@ -29,19 +26,17 @@ const listMovies = async (genreId) => {
     const response = await api.get('discover/movie', {
         params: {
             with_genres: genreId,
-            language: 'pt-BR'
-        }
+            language: 'pt-BR',
+        },
     });
-    movies.value = response.data.results
+    movies.value = response.data.results;
     isLoading.value = false;
 };
 
-function getGenreName(id) {
-    const genero = genres.value.find((genre) => genre.id === id);
-    return genero.name;
-}
-
+const formatDate = (date) => new Date(date).toLocaleDateString('pt-BR');
+const openMovie = (movieId) => router.push({ name: 'MovieDetails', params: { movieId } });
 </script>
+
 <template>
     <h1>Filmes</h1>
     <ul class="genre-list">
@@ -51,25 +46,21 @@ function getGenreName(id) {
         </li>
     </ul>
     <loading v-model:active="isLoading" is-full-page />
-
-    <span v-for="genre_id in movies.genre_id" :key="genre_id" @click="listMovies(genre_id)"
-        :class="{ active: genre.id === genreStore.currentGenreId }">
-        {{ genreStore.getGenreName(genre_id) }}
-    </span>
     <div class="movie-list">
         <div v-for="movie in movies" :key="movie.id" class="movie-card">
-
             <img :src="`https://image.tmdb.org/t/p/w500${movie.poster_path}`" :alt="movie.title"
                 @click="openMovie(movie.id)" />
             <div class="movie-details">
                 <p class="movie-title">{{ movie.title }}</p>
                 <p class="movie-release-date">{{ formatDate(movie.release_date) }}</p>
-                <p class="movie-genres"></p>
+                <button @click="favoritesStore.toggleFavorite(movie)">
+                    {{ favoritesStore.isFavorite(movie.id) ? 'Remover dos Favoritos' : 'Adicionar aos Favoritos' }}
+                </button>
             </div>
-
         </div>
     </div>
 </template>
+
 <style scoped>
 .genre-list {
     display: flex;
@@ -81,7 +72,7 @@ function getGenreName(id) {
 }
 
 .genre-item {
-    background-color: #387250;
+    background-color: rgb(220, 20, 60);
     border-radius: 1rem;
     padding: 0.5rem 1rem;
     color: #fff;
@@ -89,29 +80,29 @@ function getGenreName(id) {
 
 .genre-item:hover {
     cursor: pointer;
-    background-color: #4e9e5f;
-    box-shadow: 0 0 0.5rem #387250;
+    background-color: rgb(210, 10, 30);
+    box-shadow: 0 0 0.5rem rgb(210, 10, 30);
 }
 
 .movie-list {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
+    margin-left: 10%;
 }
 
 .movie-card {
     width: 15rem;
     height: 30rem;
-    border-radius: 0.5rem;
     overflow: hidden;
-    box-shadow: 0 0 0.5rem #000;
+  
 }
 
 .movie-card img {
     width: 100%;
     height: 20rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 0 0.5rem #000;
+    border-radius: 1rem;
+
 }
 
 .movie-details {
@@ -135,7 +126,7 @@ function getGenreName(id) {
 }
 
 .movie-genres span {
-    background-color: #748708;
+    background-color: rgb(210, 10, 30);
     border-radius: 0.5rem;
     padding: 0.2rem 0.5rem;
     color: #fff;
@@ -145,17 +136,17 @@ function getGenreName(id) {
 
 .movie-genres span:hover {
     cursor: pointer;
-    background-color: #455a08;
-    box-shadow: 0 0 0.5rem #748708;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0 0 0.5rem rgb(210, 10, 30);
 }
 
 .active {
-    background-color: #67b086;
+    background-color: rgb(210, 10, 30);
     font-weight: bolder;
 }
 
 .movie-genres span.active {
-    background-color: #abc322;
+    background-color: rgb(210, 10, 30);
     color: #000;
     font-weight: bolder;
 }
