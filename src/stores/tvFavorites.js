@@ -2,19 +2,19 @@ import { defineStore } from 'pinia'
 
 export const useTvFavoritesStore = defineStore('tvFavorites', {
   state: () => ({
-    shows: [],
+    tvs: [],
   }),
   actions: {
-    toggleFavorite(show) {
-      const exists = this.shows.find((s) => s.id === show.id)
+    toggleFavorite(tv) {
+      const exists = this.tvs.find((t) => t.id === tv.id)
       if (exists) {
-        this.shows = this.shows.filter((s) => s.id !== show.id)
+        this.tvs = this.tvs.filter((t) => t.id !== tv.id)
       } else {
-        this.shows.push(show)
+        this.tvs.push(tv)
       }
     },
-    isFavorite(showId) {
-      return this.shows.some((show) => show.id === showId)
+    isFavorite(tvId) {
+      return this.tvs.some((tv) => tv.id === tvId)
     },
   },
 })

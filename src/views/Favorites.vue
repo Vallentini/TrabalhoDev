@@ -1,8 +1,10 @@
 <script setup>
 import { useFavoritesStore } from '@/stores/favorites.js';
+import {useTvFavoritesStore} from '@/stores/tvFavorites.js'
 import { useRouter } from 'vue-router';
 
 const favoritesStore = useFavoritesStore();
+const favoriteTvStore = useTvFavoritesStore()
 const router = useRouter();
 
 const openMovie = (movieId) => router.push({ name: 'MovieDetails', params: { movieId } });
@@ -18,44 +20,32 @@ const openTv = (tvId) => router.push({ name: 'TvDetails', params: { tvId } });
             <div class="movie-details">
                 <p class="movie-title">{{ movie.title }}</p>
                 <p>{{ movie.release_date }}</p>
-                <button @click="favoritesStore.toggleFavorite(movie)">Remover dos Favoritos</button>
+                <button @click="favoritesStore.toggleFavorite(movie)" class="button-fav">Remover dos Favoritos</button>
             </div>
         </div>
-        <!-- <div v-for="tv in favoritesStore.tvs" :key="tv.id" class="movie-card">
-            <img :src="`https://image.tmdb.org/t/p/w500${tv.poster_path}`" :alt="tv.original_name"
-                @click="openTv(tv.id)" />
+        <div class="movie-list">
+        <div v-for="tv in favoriteTvStore.tvs" :key="tv.id" class="movie-card">
+            <img :src="`https://image.tmdb.org/t/p/w500${tv.poster_path}`" :alt="tv.name" @click="openTv(tv.id)" />
             <div class="movie-details">
                 <p class="movie-title">{{ tv.original_name }}</p>
-                <p>{{ tv.first_air_date }}</p>
-                <button @click="favoritesStore.toggleFavorite(tv)">Remover dos Favoritos</button>
+                <p class="movie-release-date">{{ tv.first_air_date }}</p>
+                <button @click="favoriteTvStore.toggleFavorite(tv)" class="button-favtv">Remover dos Favoritos</button>
             </div>
-        </div> -->
+        </div>
+    </div>
     </div>
 </template>
 
 <style scoped>
-.genre-list {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 2rem;
-    list-style: none;
-    margin-bottom: 2rem;
-}
+@import url('https://fonts.googleapis.com/css2?family=Chewy&family=Gorditas:wght@400;700&family=Modak&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Boogaloo&family=Chewy&family=Gorditas:wght@400;700&family=Modak&display=swap');
 
-.genre-item {
-    background-color: #387250;
-    border-radius: 1rem;
-    padding: 0.5rem 1rem;
-    color: #fff;
+h1{font-family: "Gorditas", serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 55px;
+  margin-left: 40%;
 }
-
-.genre-item:hover {
-    cursor: pointer;
-    background-color: #4e9e5f;
-    box-shadow: 0 0 0.5rem #387250;
-}
-
 .movie-list {
     display: flex;
     flex-wrap: wrap;
@@ -88,38 +78,30 @@ const openTv = (tvId) => router.push({ name: 'TvDetails', params: { tvId } });
     height: 3.2rem;
 }
 
-.movie-genres {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 0.2rem;
-}
-
-.movie-genres span {
-    background-color: #748708;
-    border-radius: 0.5rem;
-    padding: 0.2rem 0.5rem;
+.button-fav {
+    background-color: rgb(210, 10, 30);
+    height: 45px;
+    border-radius: 10px;
+    border: none;
+    font-family: "Boogaloo", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 20px;
+    margin-left: 13%;
+    margin-top: 3%;
     color: #fff;
-    font-size: 0.8rem;
-    font-weight: bold;
 }
-
-.movie-genres span:hover {
-    cursor: pointer;
-    background-color: #455a08;
-    box-shadow: 0 0 0.5rem #748708;
-}
-
-.active {
-    background-color: #67b086;
-    font-weight: bolder;
-}
-
-.movie-genres span.active {
-    background-color: #abc322;
-    color: #000;
-    font-weight: bolder;
+.button-favtv {
+    background-color: rgb(64, 105, 182);
+    height: 45px;
+    border-radius: 10px;
+    border: none;
+    font-family: "Boogaloo", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 20px;
+    margin-left: 13%;
+    margin-top: 3%;
+    color: #fff;
 }
 </style>

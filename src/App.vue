@@ -17,6 +17,7 @@
       <router-link to="/">Home</router-link>
       <router-link to="/filmes">Filmes</router-link>
       <router-link to="/tv">Programas de TV</router-link>
+      <router-link to="/favoritos">Favoritos</router-link>
     </nav>
   </header>
   <main>
@@ -27,9 +28,10 @@
 header {
   height: 3rem;
   display: flex;
-  background-color: black;
+  background-color: rgb(148, 3, 3);
   color: #fff;
   font-size: 1.2rem;
+  font-weight: 700;
   padding-left: 2rem;
 }
 

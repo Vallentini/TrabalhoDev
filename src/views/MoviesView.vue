@@ -53,7 +53,7 @@ const openMovie = (movieId) => router.push({ name: 'MovieDetails', params: { mov
             <div class="movie-details">
                 <p class="movie-title">{{ movie.title }}</p>
                 <p class="movie-release-date">{{ formatDate(movie.release_date) }}</p>
-                <button @click="favoritesStore.toggleFavorite(movie)">
+                <button @click="favoritesStore.toggleFavorite(movie)" class="button-fav">
                     {{ favoritesStore.isFavorite(movie.id) ? 'Remover dos Favoritos' : 'Adicionar aos Favoritos' }}
                 </button>
             </div>
@@ -62,6 +62,15 @@ const openMovie = (movieId) => router.push({ name: 'MovieDetails', params: { mov
 </template>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Boogaloo&family=Chewy&family=Gorditas:wght@400;700&family=Modak&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Chewy&family=Gorditas:wght@400;700&family=Modak&display=swap');
+h1{font-family: "Gorditas", serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 55px;
+  margin-left: 45%;
+}
+
 .genre-list {
     display: flex;
     justify-content: center;
@@ -150,4 +159,18 @@ const openMovie = (movieId) => router.push({ name: 'MovieDetails', params: { mov
     color: #000;
     font-weight: bolder;
 }
+.button-fav {
+    background-color: rgb(210, 10, 30);
+    height: 45px;
+    border-radius: 10px;
+    border: none;
+    font-family: "Boogaloo", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 20px;
+    margin-left: 13%;
+    margin-top: 3%;
+    color: #fff;
+}
+
 </style>
